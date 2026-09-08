@@ -45,6 +45,17 @@ const testimonialSchema = z.object({
   avatar: z.string().default(""),
 });
 
+const customizationCardSchema = z.object({
+  title: z.string().default(""),
+  body: z.string().default(""),
+  image: z.string().default(""),
+});
+
+const customizationStepSchema = z.object({
+  title: z.string().default(""),
+  body: z.string().default(""),
+});
+
 const instagramPostSchema = z.object({
   image: z.string().default(""),
   link: z.string().default(""),
@@ -146,6 +157,44 @@ export const settingsSchema = z.object({
       highlights: z.array(highlightSchema).default([]),
       banners: z.array(bannerSchema).default([]),
       testimonials: z.array(testimonialSchema).default([]),
+    })
+    .default({}),
+  customization: z
+    .object({
+      introEyebrow: z.string().default(""),
+      introHeading: z.string().default(""),
+      introBody: z.string().default(""),
+      introImage: z.string().default(""),
+      offeringsHeading: z.string().default(""),
+      offeringsIntro: z.string().default(""),
+      offerings: z.array(customizationCardSchema).max(8).default([]),
+      processHeading: z.string().default(""),
+      processIntro: z.string().default(""),
+      steps: z.array(customizationStepSchema).max(8).default([]),
+      closingHeading: z.string().default(""),
+      closingBody: z.string().default(""),
+      closingImage: z.string().default(""),
+      ctaLabel: z.string().default(""),
+      ctaLink: z.string().default("#customization-form"),
+    })
+    .default({}),
+  bulkOrders: z
+    .object({
+      introEyebrow: z.string().default(""),
+      introHeading: z.string().default(""),
+      introBody: z.string().default(""),
+      introImage: z.string().default(""),
+      offeringsHeading: z.string().default(""),
+      offeringsIntro: z.string().default(""),
+      offerings: z.array(customizationCardSchema).max(8).default([]),
+      processHeading: z.string().default(""),
+      processIntro: z.string().default(""),
+      steps: z.array(customizationStepSchema).max(8).default([]),
+      closingHeading: z.string().default(""),
+      closingBody: z.string().default(""),
+      closingImage: z.string().default(""),
+      ctaLabel: z.string().default(""),
+      ctaLink: z.string().default("#bulk-order-form"),
     })
     .default({}),
   header: z

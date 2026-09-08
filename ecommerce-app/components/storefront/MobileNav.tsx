@@ -6,6 +6,8 @@ import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { CircleHelp, Heart, Menu, MessageCircle, PackageSearch, Plus, ShoppingBag, UserRound, X } from "lucide-react";
 import type { NavLink } from "@/lib/site-settings";
+import { withTrademark } from "@/lib/brand";
+import { isDirectNavHref } from "@/lib/site-settings-constants";
 
 /**
  * Slide-in navigation for small screens.
@@ -28,6 +30,7 @@ export function MobileNav({
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
   const pathname = usePathname();
+  const displayStoreName = withTrademark(storeName);
 
   // Any navigation closes the drawer — App Router keeps the component mounted
   // across route changes, so it would otherwise stay open over the new page.
@@ -75,7 +78,7 @@ export function MobileNav({
                 href="/"
                 className="justify-self-center font-display text-lg font-semibold uppercase tracking-[0.2em] text-heading"
               >
-                {storeName}
+                {displayStoreName}
               </Link>
               <Link
                 href="/cart"
@@ -106,7 +109,7 @@ export function MobileNav({
             <div className="flex-1 overflow-y-auto">
               <div className="px-5 py-2">
               {navLinks.map((link) => {
-                const hasChildren = !!link.children?.length;
+                const hasChildren = !isDirectNavHref(link.href) && !!link.children?.length;
                 const isExpanded = expanded === link.label;
                 return (
                   <div key={link.label} className="border-b border-line last:border-0">
@@ -185,7 +188,7 @@ export function MobileNav({
             </div>
 
             <div className="bg-heading px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 text-center text-[10px] font-semibold uppercase tracking-[0.24em] text-background">
-              {storeName} · Premium Menswear
+              {displayStoreName} · Premium Menswear
             </div>
           </nav>
         </div>,

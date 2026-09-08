@@ -84,6 +84,23 @@ const TestimonialSchema = new Schema(
   { _id: false }
 );
 
+const CustomizationCardSchema = new Schema(
+  {
+    title: { type: String, default: "" },
+    body: { type: String, default: "" },
+    image: { type: String, default: "" },
+  },
+  { _id: false }
+);
+
+const CustomizationStepSchema = new Schema(
+  {
+    title: { type: String, default: "" },
+    body: { type: String, default: "" },
+  },
+  { _id: false }
+);
+
 const InstagramPostSchema = new Schema(
   {
     image: { type: String, default: "" },
@@ -129,7 +146,7 @@ const IntegrationsSchema = new Schema(
 
     // Conversational channels
     whatsappNumber: { type: String, default: "" }, // E.164, no "+"
-    whatsappPrefillMessage: { type: String, default: "Hi ZenBlue, I have a question about" },
+    whatsappPrefillMessage: { type: String, default: "Hi ZenBlue™, I have a question about" },
     whatsappCatalogUrl: { type: String, default: "" },
 
     // Contact page map (an <iframe> embed URL)
@@ -334,6 +351,27 @@ const HomeSchema = new Schema(
   { _id: false }
 );
 
+const CustomizationSchema = new Schema(
+  {
+    introEyebrow: { type: String, default: "" },
+    introHeading: { type: String, default: "" },
+    introBody: { type: String, default: "" },
+    introImage: { type: String, default: "" },
+    offeringsHeading: { type: String, default: "" },
+    offeringsIntro: { type: String, default: "" },
+    offerings: { type: [CustomizationCardSchema], default: [] },
+    processHeading: { type: String, default: "" },
+    processIntro: { type: String, default: "" },
+    steps: { type: [CustomizationStepSchema], default: [] },
+    closingHeading: { type: String, default: "" },
+    closingBody: { type: String, default: "" },
+    closingImage: { type: String, default: "" },
+    ctaLabel: { type: String, default: "" },
+    ctaLink: { type: String, default: "#customization-form" },
+  },
+  { _id: false }
+);
+
 const HeaderSchema = new Schema(
   {
     navLinks: { type: [HeaderLinkSchema], default: [] },
@@ -389,6 +427,8 @@ const SiteSettingsSchema = new Schema(
     commerce: { type: CommerceSchema, default: () => ({}) },
     announcement: { type: AnnouncementSchema, default: () => ({}) },
     home: { type: HomeSchema, default: () => ({}) },
+    customization: { type: CustomizationSchema, default: () => ({}) },
+    bulkOrders: { type: CustomizationSchema, default: () => ({}) },
     header: { type: HeaderSchema, default: () => ({}) },
     footer: { type: FooterSchema, default: () => ({}) },
     contact: { type: ContactSchema, default: () => ({}) },

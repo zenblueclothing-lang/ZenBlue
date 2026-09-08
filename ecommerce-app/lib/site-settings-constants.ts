@@ -7,3 +7,9 @@ export const DEFAULT_MEGA_MENU_IMAGES = [
   "/banners/effortless-expression-oversized-tee.png",
   "/banners/feel-the-difference.png",
 ];
+
+/** Header links that always navigate directly and never open a submenu. */
+export function isDirectNavHref(href: string): boolean {
+  const normalized = href.split("?")[0].replace(/\/+$/, "") || "/";
+  return normalized === "/bulk-orders" || normalized === "/customization";
+}

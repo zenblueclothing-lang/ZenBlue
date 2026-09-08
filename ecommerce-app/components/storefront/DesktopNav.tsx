@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, X } from "lucide-react";
 import type { NavLink } from "@/lib/site-settings";
-import { DEFAULT_MEGA_MENU_IMAGES } from "@/lib/site-settings-constants";
+import { DEFAULT_MEGA_MENU_IMAGES, isDirectNavHref } from "@/lib/site-settings-constants";
 
 /**
  * Desktop primary navigation. Submenus are click-controlled so the large menu
@@ -64,7 +64,7 @@ export function DesktopNav({ navLinks }: { navLinks: NavLink[] }) {
       className="hidden items-center gap-2 xl:flex 2xl:gap-3"
     >
       {navLinks.map((link) => {
-        const children = link.children ?? [];
+        const children = isDirectNavHref(link.href) ? [] : (link.children ?? []);
         const hasChildren = children.length > 0;
 
         return (

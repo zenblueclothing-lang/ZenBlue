@@ -88,5 +88,9 @@ function summarize(obj: any) {
     navLinkCount: obj?.header?.navLinks?.length ?? 0,
     footerColumnCount: obj?.footer?.columns?.length ?? 0,
     bannerCount: obj?.home?.banners?.length ?? 0,
+    customizationOfferingCount: obj?.customization?.offerings?.length ?? 0,
+    customizationStepCount: obj?.customization?.steps?.length ?? 0,
+    bulkOrderOfferingCount: obj?.bulkOrders?.offerings?.length ?? 0,
+    bulkOrderStepCount: obj?.bulkOrders?.steps?.length ?? 0,
   };
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MAX_HERO_SLIDES } from "@/lib/site-settings-constants";
+import { isDirectNavHref, MAX_HERO_SLIDES } from "@/lib/site-settings-constants";
 import { Plus, Trash2, ArrowUp, ArrowDown, Save } from "lucide-react";
 import { SingleImageUpload } from "@/components/admin/SingleImageUpload";
 import { SingleVideoUpload } from "@/components/admin/SingleVideoUpload";
@@ -242,6 +242,8 @@ const TABS = [
   "Theme",
   "Commerce",
   "Homepage",
+  "Bulk Orders",
+  "Customization",
   "Navigation",
   "Footer",
   "Contact & Social",
@@ -434,7 +436,7 @@ export default function AdminSettingsPage() {
           />
           <p className="text-sm text-gray-500">
             The header picks whichever suits the live colour direction. The supplied navy-on-white
-            ZenBlue mark is set as the light-background logo. Use the reversed slot for a white mark
+            ZenBlue™ mark is set as the light-background logo. Use the reversed slot for a white mark
             on dark backgrounds. You can upload an image or paste a public URL/local path; leave
             either blank to fall back to the other, or clear both to show the store name as type.
           </p>
@@ -469,7 +471,7 @@ export default function AdminSettingsPage() {
           <div>
             <h3 className="font-semibold mb-1">Colour direction</h3>
             <p className="text-sm text-gray-500 mb-4">
-              The four directions from the ZenBlue brand deck. Switching one re-skins the whole
+              The four directions from the ZenBlue™ brand deck. Switching one re-skins the whole
               site — storefront and admin — with no redeploy.
             </p>
 
@@ -698,9 +700,10 @@ export default function AdminSettingsPage() {
           </section>
 
           <section className="space-y-3">
-            <h3 className="font-semibold">Testimonials</h3>
+            <h3 className="font-semibold">Manual testimonials</h3>
             <p className="text-xs text-gray-400">
-              The first three are shown. Use real customer quotes — specific ones convert.
+              Approved product reviews marked &ldquo;Homepage&rdquo; in Reviews appear first. These
+              manual quotes fill any remaining spaces, up to six cards in total.
             </p>
             {s.home.testimonials.map((t, i) => (
               <ItemCard
@@ -750,40 +753,6 @@ export default function AdminSettingsPage() {
           </section>
 
           <section className="space-y-3">
-            <h3 className="font-semibold">Feature highlights</h3>
-            <p className="text-xs text-gray-400">
-              The small trust strip (e.g. Fast Shipping / Secure Payments). Icon is any{" "}
-              <a href="https://lucide.dev/icons" target="_blank" rel="noreferrer" className="underline">
-                Lucide icon
-              </a>{" "}
-              name like <code>Truck</code>.
-            </p>
-            {s.home.highlights.map((h, i) => (
-              <ItemCard
-                key={i}
-                index={i}
-                total={s.home.highlights.length}
-                onMove={(f, t) => moveItem("home.highlights", f, t)}
-                onRemove={(idx) => removeItem("home.highlights", idx)}
-              >
-                <div className="grid grid-cols-3 gap-3">
-                  <Text label="Icon" value={h.icon} onChange={(v) => set(["home", "highlights", i, "icon"], v)} />
-                  <Text label="Title" value={h.title} onChange={(v) => set(["home", "highlights", i, "title"], v)} />
-                  <Text
-                    label="Subtitle"
-                    value={h.subtitle}
-                    onChange={(v) => set(["home", "highlights", i, "subtitle"], v)}
-                  />
-                </div>
-              </ItemCard>
-            ))}
-            <AddButton
-              label="Add highlight"
-              onClick={() => pushItem("home.highlights", { icon: "", title: "", subtitle: "" })}
-            />
-          </section>
-
-          <section className="space-y-3">
             <h3 className="font-semibold">Promo banners</h3>
             <p className="text-xs text-gray-400">Full-width promotional banners rendered under the categories grid.</p>
             {s.home.banners.map((b, i) => (
@@ -821,6 +790,156 @@ export default function AdminSettingsPage() {
         </div>
       )}
 
+      {/* ------------------------- BULK ORDERS --------------------- */}
+      {tab === "Bulk Orders" && (
+        <div className="space-y-8">
+          <div>
+            <h3 className="font-semibold">Bulk Orders page content</h3>
+            <p className="mt-1 text-sm text-gray-500">
+              These sections appear below the quotation form. All imagery uses a consistent 3:2 crop.
+            </p>
+          </div>
+
+          <section className="space-y-4 border-t pt-5">
+            <h3 className="font-semibold">Introduction</h3>
+            <SingleImageUpload label="Introduction image" aspect="blog" value={s.bulkOrders.introImage} onChange={(v) => set("bulkOrders.introImage", v)} />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Text label="Eyebrow" value={s.bulkOrders.introEyebrow} onChange={(v) => set("bulkOrders.introEyebrow", v)} />
+              <Text label="Heading" value={s.bulkOrders.introHeading} onChange={(v) => set("bulkOrders.introHeading", v)} />
+            </div>
+            <TextArea label="Description" value={s.bulkOrders.introBody} onChange={(v) => set("bulkOrders.introBody", v)} rows={5} />
+          </section>
+
+          <section className="space-y-4 border-t pt-5">
+            <h3 className="font-semibold">Offerings</h3>
+            <Text label="Section heading" value={s.bulkOrders.offeringsHeading} onChange={(v) => set("bulkOrders.offeringsHeading", v)} />
+            <TextArea label="Section introduction" value={s.bulkOrders.offeringsIntro} onChange={(v) => set("bulkOrders.offeringsIntro", v)} />
+            {s.bulkOrders.offerings.map((item, index) => (
+              <ItemCard key={index} index={index} total={s.bulkOrders.offerings.length} onMove={(from, to) => moveItem("bulkOrders.offerings", from, to)} onRemove={(itemIndex) => removeItem("bulkOrders.offerings", itemIndex)}>
+                <SingleImageUpload label={`Offering ${index + 1} image`} aspect="blog" value={item.image} onChange={(v) => set(["bulkOrders", "offerings", index, "image"], v)} />
+                <Text label="Title" value={item.title} onChange={(v) => set(["bulkOrders", "offerings", index, "title"], v)} />
+                <TextArea label="Description" value={item.body} onChange={(v) => set(["bulkOrders", "offerings", index, "body"], v)} />
+              </ItemCard>
+            ))}
+            <AddButton label="Add offering" onClick={() => pushItem("bulkOrders.offerings", { title: "", body: "", image: "" })} />
+          </section>
+
+          <section className="space-y-4 border-t pt-5">
+            <h3 className="font-semibold">Process</h3>
+            <Text label="Section heading" value={s.bulkOrders.processHeading} onChange={(v) => set("bulkOrders.processHeading", v)} />
+            <TextArea label="Section introduction" value={s.bulkOrders.processIntro} onChange={(v) => set("bulkOrders.processIntro", v)} />
+            {s.bulkOrders.steps.map((step, index) => (
+              <ItemCard key={index} index={index} total={s.bulkOrders.steps.length} onMove={(from, to) => moveItem("bulkOrders.steps", from, to)} onRemove={(itemIndex) => removeItem("bulkOrders.steps", itemIndex)}>
+                <Text label={`Step ${index + 1} title`} value={step.title} onChange={(v) => set(["bulkOrders", "steps", index, "title"], v)} />
+                <TextArea label="Description" value={step.body} onChange={(v) => set(["bulkOrders", "steps", index, "body"], v)} />
+              </ItemCard>
+            ))}
+            <AddButton label="Add process step" onClick={() => pushItem("bulkOrders.steps", { title: "", body: "" })} />
+          </section>
+
+          <section className="space-y-4 border-t pt-5">
+            <h3 className="font-semibold">Closing section</h3>
+            <SingleImageUpload label="Closing image" aspect="blog" value={s.bulkOrders.closingImage} onChange={(v) => set("bulkOrders.closingImage", v)} />
+            <Text label="Heading" value={s.bulkOrders.closingHeading} onChange={(v) => set("bulkOrders.closingHeading", v)} />
+            <TextArea label="Description" value={s.bulkOrders.closingBody} onChange={(v) => set("bulkOrders.closingBody", v)} rows={4} />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Text label="Button text" value={s.bulkOrders.ctaLabel} onChange={(v) => set("bulkOrders.ctaLabel", v)} />
+              <Text label="Button link" value={s.bulkOrders.ctaLink} onChange={(v) => set("bulkOrders.ctaLink", v)} />
+            </div>
+          </section>
+        </div>
+      )}
+
+      {/* ------------------------- CUSTOMIZATION ------------------- */}
+      {tab === "Customization" && (
+        <div className="space-y-8">
+          <div>
+            <h3 className="font-semibold">Customization page content</h3>
+            <p className="mt-1 text-sm text-gray-500">
+              These sections appear below the enquiry form. All imagery uses a consistent 3:2 crop.
+            </p>
+          </div>
+
+          <section className="space-y-4 border-t pt-5">
+            <h3 className="font-semibold">Introduction</h3>
+            <SingleImageUpload
+              label="Introduction image"
+              aspect="blog"
+              value={s.customization.introImage}
+              onChange={(v) => set("customization.introImage", v)}
+            />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Text label="Eyebrow" value={s.customization.introEyebrow} onChange={(v) => set("customization.introEyebrow", v)} />
+              <Text label="Heading" value={s.customization.introHeading} onChange={(v) => set("customization.introHeading", v)} />
+            </div>
+            <TextArea label="Description" value={s.customization.introBody} onChange={(v) => set("customization.introBody", v)} rows={5} />
+          </section>
+
+          <section className="space-y-4 border-t pt-5">
+            <h3 className="font-semibold">Offerings</h3>
+            <Text label="Section heading" value={s.customization.offeringsHeading} onChange={(v) => set("customization.offeringsHeading", v)} />
+            <TextArea label="Section introduction" value={s.customization.offeringsIntro} onChange={(v) => set("customization.offeringsIntro", v)} />
+            {s.customization.offerings.map((item, index) => (
+              <ItemCard
+                key={index}
+                index={index}
+                total={s.customization.offerings.length}
+                onMove={(from, to) => moveItem("customization.offerings", from, to)}
+                onRemove={(itemIndex) => removeItem("customization.offerings", itemIndex)}
+              >
+                <SingleImageUpload
+                  label={`Offering ${index + 1} image`}
+                  aspect="blog"
+                  value={item.image}
+                  onChange={(v) => set(["customization", "offerings", index, "image"], v)}
+                />
+                <Text label="Title" value={item.title} onChange={(v) => set(["customization", "offerings", index, "title"], v)} />
+                <TextArea label="Description" value={item.body} onChange={(v) => set(["customization", "offerings", index, "body"], v)} />
+              </ItemCard>
+            ))}
+            <AddButton
+              label="Add offering"
+              onClick={() => pushItem("customization.offerings", { title: "", body: "", image: "" })}
+            />
+          </section>
+
+          <section className="space-y-4 border-t pt-5">
+            <h3 className="font-semibold">Process</h3>
+            <Text label="Section heading" value={s.customization.processHeading} onChange={(v) => set("customization.processHeading", v)} />
+            <TextArea label="Section introduction" value={s.customization.processIntro} onChange={(v) => set("customization.processIntro", v)} />
+            {s.customization.steps.map((step, index) => (
+              <ItemCard
+                key={index}
+                index={index}
+                total={s.customization.steps.length}
+                onMove={(from, to) => moveItem("customization.steps", from, to)}
+                onRemove={(itemIndex) => removeItem("customization.steps", itemIndex)}
+              >
+                <Text label={`Step ${index + 1} title`} value={step.title} onChange={(v) => set(["customization", "steps", index, "title"], v)} />
+                <TextArea label="Description" value={step.body} onChange={(v) => set(["customization", "steps", index, "body"], v)} />
+              </ItemCard>
+            ))}
+            <AddButton label="Add process step" onClick={() => pushItem("customization.steps", { title: "", body: "" })} />
+          </section>
+
+          <section className="space-y-4 border-t pt-5">
+            <h3 className="font-semibold">Closing section</h3>
+            <SingleImageUpload
+              label="Closing image"
+              aspect="blog"
+              value={s.customization.closingImage}
+              onChange={(v) => set("customization.closingImage", v)}
+            />
+            <Text label="Heading" value={s.customization.closingHeading} onChange={(v) => set("customization.closingHeading", v)} />
+            <TextArea label="Description" value={s.customization.closingBody} onChange={(v) => set("customization.closingBody", v)} rows={4} />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Text label="Button text" value={s.customization.ctaLabel} onChange={(v) => set("customization.ctaLabel", v)} />
+              <Text label="Button link" value={s.customization.ctaLink} onChange={(v) => set("customization.ctaLink", v)} />
+            </div>
+          </section>
+        </div>
+      )}
+
       {/* ------------------------- NAVIGATION ---------------------- */}
       {tab === "Navigation" && (
         <div className="space-y-3">
@@ -837,6 +956,12 @@ export default function AdminSettingsPage() {
                 <Text label="Label" value={l.label} onChange={(v) => set(["header", "navLinks", i, "label"], v)} />
                 <Text label="Href" value={l.href} onChange={(v) => set(["header", "navLinks", i, "href"], v)} />
               </div>
+              {isDirectNavHref(l.href) ? (
+                <p className="rounded-md border bg-white p-3 text-xs text-gray-500">
+                  Direct link — dropdown options are disabled for this navigation item.
+                </p>
+              ) : (
+              <>
               <div className="space-y-2 rounded-md border bg-white p-3">
                 <div>
                   <p className="text-sm font-medium">Dropdown options</p>
@@ -949,6 +1074,8 @@ export default function AdminSettingsPage() {
                   These three cards appear when shoppers hover over this navigation link.
                 </p>
               </div>
+              </>
+              )}
             </ItemCard>
           ))}
           <AddButton
@@ -1322,36 +1449,6 @@ export default function AdminSettingsPage() {
             </table>
           </div>
 
-          <section className="space-y-4 border-t pt-5">
-            <h3 className="font-semibold">Newsletter block</h3>
-            <Toggle
-              label="Show the newsletter signup in the footer"
-              value={s.newsletter.enabled}
-              onChange={(v) => set("newsletter.enabled", v)}
-            />
-            <div className="grid grid-cols-2 gap-4">
-              <Text
-                label="Heading"
-                value={s.newsletter.heading}
-                onChange={(v) => set("newsletter.heading", v)}
-              />
-              <Text
-                label="Button text"
-                value={s.newsletter.buttonText}
-                onChange={(v) => set("newsletter.buttonText", v)}
-              />
-            </div>
-            <Text
-              label="Subtext"
-              value={s.newsletter.subtext}
-              onChange={(v) => set("newsletter.subtext", v)}
-            />
-            <Text
-              label="Success message"
-              value={s.newsletter.successMessage}
-              onChange={(v) => set("newsletter.successMessage", v)}
-            />
-          </section>
         </div>
       )}
 

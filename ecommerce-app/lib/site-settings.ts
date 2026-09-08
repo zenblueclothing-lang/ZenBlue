@@ -4,6 +4,7 @@ import { getPalette, type PaletteTokens } from "@/lib/theme";
 import { DEFAULT_MEGA_MENU_IMAGES } from "@/lib/site-settings-constants";
 import { RETURN_WINDOW_DAYS } from "@/lib/return-policy";
 import { cache } from "react";
+import { withTrademark, withTrademarkInDisplayData } from "@/lib/brand";
 export { MAX_HERO_SLIDES, DEFAULT_MEGA_MENU_IMAGES } from "@/lib/site-settings-constants";
 
 /**
@@ -64,6 +65,15 @@ export interface SizeChart {
   columns: string[];
   rows: string[][];
 }
+export interface CustomizationCard {
+  title: string;
+  body: string;
+  image: string;
+}
+export interface CustomizationStep {
+  title: string;
+  body: string;
+}
 export interface ChannelToggle {
   email: boolean;
   whatsapp: boolean;
@@ -122,6 +132,40 @@ export interface SiteSettingsData {
     highlights: Highlight[];
     banners: Banner[];
     testimonials: Testimonial[];
+  };
+  customization: {
+    introEyebrow: string;
+    introHeading: string;
+    introBody: string;
+    introImage: string;
+    offeringsHeading: string;
+    offeringsIntro: string;
+    offerings: CustomizationCard[];
+    processHeading: string;
+    processIntro: string;
+    steps: CustomizationStep[];
+    closingHeading: string;
+    closingBody: string;
+    closingImage: string;
+    ctaLabel: string;
+    ctaLink: string;
+  };
+  bulkOrders: {
+    introEyebrow: string;
+    introHeading: string;
+    introBody: string;
+    introImage: string;
+    offeringsHeading: string;
+    offeringsIntro: string;
+    offerings: CustomizationCard[];
+    processHeading: string;
+    processIntro: string;
+    steps: CustomizationStep[];
+    closingHeading: string;
+    closingBody: string;
+    closingImage: string;
+    ctaLabel: string;
+    ctaLink: string;
   };
   header: { navLinks: NavLink[] };
   footer: { about: string; columns: FooterColumn[]; copyrightText: string };
@@ -221,7 +265,7 @@ const allChannels = (email = true, whatsapp = false, sms = false): ChannelToggle
  */
 export const DEFAULT_SETTINGS: SiteSettingsData = {
   brand: {
-    storeName: "ZEN BLUE",
+    storeName: "ZEN BLUE™",
     tagline: "Minimal by design. Distinct by identity.",
     // Ship the bundled wordmarks so the header is branded before anything is
     // uploaded. Replace either at Admin → Settings → Branding.
@@ -230,9 +274,9 @@ export const DEFAULT_SETTINGS: SiteSettingsData = {
     faviconUrl: "/brand/favicon.svg",
   },
   seo: {
-    metaTitle: "ZEN BLUE — Premium Menswear",
+    metaTitle: "ZEN BLUE™ — Premium Menswear",
     metaDescription:
-      "ZEN BLUE is a modern menswear brand focused on premium, versatile and minimal clothing designed for the contemporary man.",
+      "ZEN BLUE™ is a modern menswear brand focused on premium, versatile and minimal clothing designed for the contemporary man.",
   },
   theme: {
     // Direction B (Ivory & Navy) — the selected colour direction.
@@ -314,6 +358,88 @@ export const DEFAULT_SETTINGS: SiteSettingsData = {
       },
     ],
   },
+  customization: {
+    introEyebrow: "Made for your team",
+    introHeading: "Your identity, finished into every detail",
+    introBody:
+      "From a single embroidered piece to a complete team wardrobe, we adapt ZenBlue essentials around your colours, artwork and fit requirements. Our team helps refine the brief, recommends the right fabric and confirms every detail before production begins.",
+    introImage: "/banners/details-that-define-shirt.png",
+    offeringsHeading: "What we can create",
+    offeringsIntro:
+      "Considered apparel for teams, events and brands—with consistent construction across every piece.",
+    offerings: [
+      {
+        title: "Branded shirts and T-shirts",
+        body: "Embroidery, print and monogram placements developed around your logo and brand colours.",
+        image: "/banners/shirts-that-define-you.png",
+      },
+      {
+        title: "Team uniforms",
+        body: "Comfortable, repeatable styles for hospitality, retail, offices, events and field teams.",
+        image: "/banners/feel-the-difference.png",
+      },
+      {
+        title: "Events and gifting",
+        body: "Coordinated apparel and personalized packs for launches, celebrations and client gifting.",
+        image: "/banners/effortless-expression-oversized-tee.png",
+      },
+    ],
+    processHeading: "From brief to delivery",
+    processIntro: "A clear approval-led process keeps the result, quantity and delivery date aligned.",
+    steps: [
+      { title: "Share your requirement", body: "Tell us the product, quantity, branding and required date." },
+      { title: "Select fabric and details", body: "We recommend materials, colours, fits and branding techniques." },
+      { title: "Approve the sample", body: "Review the placement mock-up or sample before the production run." },
+      { title: "Production and delivery", body: "We complete quality checks, pack the order and dispatch it together." },
+    ],
+    closingHeading: "Built consistently, delivered professionally",
+    closingBody:
+      "Every order is reviewed for artwork placement, colour consistency and finishing before dispatch. Share your requirement and our team will respond with the next steps and a tailored quotation.",
+    closingImage: "/banners/effortless-style-plaid-shirt.png",
+    ctaLabel: "Start your customization brief",
+    ctaLink: "#customization-form",
+  },
+  bulkOrders: {
+    introEyebrow: "Made for teams",
+    introHeading: "One standard, across every piece",
+    introBody:
+      "From corporate uniforms and event apparel to gifting and wholesale runs, we coordinate fabric, fit, colour and branding across the complete order. Share your quantity and delivery date, and our team will recommend the most practical production route.",
+    introImage: "/banners/shirts-that-define-you.png",
+    offeringsHeading: "Bulk orders, built around your requirement",
+    offeringsIntro:
+      "Consistent apparel for businesses, teams and occasions—with clear pricing and approvals before production.",
+    offerings: [
+      {
+        title: "Corporate and team uniforms",
+        body: "Coordinated shirts, polos and T-shirts with repeatable sizing and professional brand placement.",
+        image: "/banners/details-that-define-shirt.png",
+      },
+      {
+        title: "Events and group orders",
+        body: "Unified apparel for launches, celebrations, clubs and teams, planned around your required date.",
+        image: "/banners/feel-the-difference.png",
+      },
+      {
+        title: "Gifting and wholesale",
+        body: "Considered packs and volume orders with tiered pricing, GST invoicing and pan-India delivery.",
+        image: "/banners/effortless-expression-oversized-tee.png",
+      },
+    ],
+    processHeading: "From requirement to delivery",
+    processIntro: "A simple approval-led process keeps quantity, quality, pricing and timelines aligned.",
+    steps: [
+      { title: "Share the brief", body: "Tell us the styles, quantities, sizes, branding and required date." },
+      { title: "Receive your quote", body: "We confirm pricing, production time and the recommended specification." },
+      { title: "Approve the sample", body: "Review the size set, artwork placement or sample before production." },
+      { title: "Production and dispatch", body: "We quality-check, pack and ship the completed order to your address." },
+    ],
+    closingHeading: "Reliable at every quantity",
+    closingBody:
+      "Every bulk order is reviewed for size allocation, colour consistency, branding and finishing before dispatch. Send your requirement and our bulk desk will respond with a tailored quotation and achievable timeline.",
+    closingImage: "/banners/effortless-style-plaid-shirt.png",
+    ctaLabel: "Request a bulk quotation",
+    ctaLink: "#bulk-order-form",
+  },
   header: {
     // Kept short: with the logo occupying the centre track, a long nav pushes
     // the left column wide and unbalances the header. Everything else lives in
@@ -371,24 +497,14 @@ export const DEFAULT_SETTINGS: SiteSettingsData = {
       {
         label: "BULK ORDERS",
         href: "/bulk-orders",
-        promoImages: [...DEFAULT_MEGA_MENU_IMAGES],
-        children: [
-          { label: "Corporate Orders", href: "/bulk-orders" },
-          { label: "Team Uniforms", href: "/bulk-orders" },
-          { label: "Event Orders", href: "/bulk-orders" },
-          { label: "Request a Quote", href: "/bulk-orders" },
-        ],
+        promoImages: [],
+        children: [],
       },
       {
         label: "CUSTOMIZATION",
         href: "/customization",
-        promoImages: [...DEFAULT_MEGA_MENU_IMAGES],
-        children: [
-          { label: "Custom T-Shirts", href: "/customization" },
-          { label: "Custom Shirts", href: "/customization" },
-          { label: "Embroidery", href: "/customization" },
-          { label: "Bulk Customization", href: "/customization" },
-        ],
+        promoImages: [],
+        children: [],
       },
     ],
   },
@@ -427,7 +543,7 @@ export const DEFAULT_SETTINGS: SiteSettingsData = {
         ],
       },
     ],
-    copyrightText: "© {year} ZEN BLUE. All rights reserved.",
+    copyrightText: "© {year} ZEN BLUE™. All rights reserved.",
   },
   contact: {
     email: "zenblueclothing@gmail.com",
@@ -443,7 +559,7 @@ export const DEFAULT_SETTINGS: SiteSettingsData = {
     metaPixelId: "",
     googleSiteVerification: "",
     whatsappNumber: "917487859546",
-    whatsappPrefillMessage: "Hi ZEN BLUE, I have a question about",
+    whatsappPrefillMessage: "Hi ZEN BLUE™, I have a question about",
     whatsappCatalogUrl: "",
     mapEmbedUrl: "",
     instagramHandle: "zenblue",
@@ -578,6 +694,41 @@ async function readSiteSettings(): Promise<SiteSettingsData> {
       doc = created.toObject();
     }
     const settings = mergeSettings(DEFAULT_SETTINGS, doc as unknown);
+    // Bulk Orders and Customization are intentionally single destination
+    // links. Remove submenu data left in older settings documents so the
+    // storefront and Navigation editor remain consistent.
+    let directNavChanged = false;
+    settings.header.navLinks = settings.header.navLinks.map((link) => {
+      const href = link.href.split("?")[0].replace(/\/+$/, "") || "/";
+      const isDirect = href === "/bulk-orders" || href === "/customization";
+      if (!isDirect || (!(link.children?.length) && !(link.promoImages?.length))) return link;
+      directNavChanged = true;
+      return { ...link, children: [], promoImages: [] };
+    });
+    if (directNavChanged) {
+      await SiteSettings.updateOne(
+        { singletonKey: "site" },
+        { $set: { "header.navLinks": settings.header.navLinks } }
+      );
+    }
+    const trademarkedStoreName = withTrademark(settings.brand.storeName);
+    if (trademarkedStoreName !== settings.brand.storeName) {
+      settings.brand.storeName = trademarkedStoreName;
+      await SiteSettings.updateOne(
+        { singletonKey: "site" },
+        { $set: { "brand.storeName": trademarkedStoreName } }
+      );
+    }
+    settings.seo.metaTitle = withTrademark(settings.seo.metaTitle);
+    settings.seo.metaDescription = withTrademark(settings.seo.metaDescription);
+    settings.footer.copyrightText = withTrademark(settings.footer.copyrightText);
+    settings.integrations.whatsappPrefillMessage = withTrademark(
+      settings.integrations.whatsappPrefillMessage
+    );
+    settings.integrations.reelVideos = settings.integrations.reelVideos.map((reel) => ({
+      ...reel,
+      title: withTrademark(reel.title),
+    }));
     // The store's customer policy is a fixed seven-day window. Normalize old
     // documents so a stale admin value can never leave the UI and API at odds.
     if (settings.returns.windowDays !== RETURN_WINDOW_DAYS) {
@@ -623,11 +774,11 @@ async function readSiteSettings(): Promise<SiteSettingsData> {
         { $set: { "contact.supportEmail": "support@zenblue.in" } }
       );
     }
-    return settings;
+    return withTrademarkInDisplayData(settings);
   } catch (err) {
     // Never let a settings/DB hiccup take down a page — fall back to defaults.
     console.error("getSiteSettings failed, using defaults:", err);
-    return DEFAULT_SETTINGS;
+    return withTrademarkInDisplayData(DEFAULT_SETTINGS);
   }
 }
 
